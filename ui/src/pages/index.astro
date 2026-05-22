@@ -1,34 +1,31 @@
 ---
-// Vinaria home — bottle list and quick actions.
-// This is a placeholder that establishes the page shell. Real components
-// land in follow-up commits.
+import Shell from "../layouts/Shell.astro";
+
+// Phase-xp stub: the bottle list is empty until the Tauri IPC contract is
+// wired up. Once src-tauri exposes list_bottles, this page will hydrate
+// from the invoke handler.
+const bottles: { id: string; name: string; recipe?: string; status: string }[] = [];
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>Vinaria</title>
-    <style is:global>
-      :root {
-        color-scheme: dark;
-        --bg: #1a1110;
-        --fg: #f3e9d2;
-        --accent: #8b3a3a;
-      }
-      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 system-ui, sans-serif; }
-      header { padding: 24px 32px; border-bottom: 1px solid #2a1f1d; }
-      h1 { margin: 0; font-weight: 600; letter-spacing: -0.01em; }
-      main { padding: 32px; }
-      .empty { color: #8d7d6a; }
-    </style>
-  </head>
-  <body>
-    <header>
-      <h1>Vinaria 🍷</h1>
-    </header>
-    <main>
-      <p class="empty">No bottles yet. Phase 5 will land the "Install Application" flow.</p>
-    </main>
-  </body>
-</html>
+<Shell title="Vinaria — Bottles" active="bottles">
+  <h1 class="page-title">Bottles</h1>
+  <p class="page-subtitle">Windows applications running through your Wine install.</p>
+
+  {bottles.length === 0 ? (
+    <div class="empty-state">
+      <h3>No bottles yet</h3>
+      <p>A bottle is one Windows app set up to run on your Mac. Start with the recipe catalog or import an existing Wine prefix.</p>
+      <button class="btn btn-primary">Install application</button>
+    </div>
+  ) : (
+    <div class="card-grid">
+      {bottles.map((b) => (
+        <div class="card">
+          <h3>{b.name}</h3>
+          {b.recipe && <p style="color: var(--fg-muted); margin: 4px 0 12px;">recipe: {b.recipe}</p>}
+          <span class={`badge badge-${b.status}`}>{b.status}</span>
+        </div>
+      ))}
+    </div>
+  )}
+</Shell>

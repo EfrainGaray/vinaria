@@ -1,0 +1,270 @@
+/* Vinaria design tokens. See docs/design-language.md for the rationale. */
+
+:root {
+  color-scheme: light dark;
+
+  --bg-app: #f4f3ee;
+  --bg-sidebar: #161e2d;
+  --bg-card: #ffffff;
+  --bg-hover: rgba(22, 30, 45, 0.04);
+  --fg-primary: #1a1a1f;
+  --fg-muted: #6f6c66;
+  --fg-on-dark: #f3e9d2;
+  --fg-on-dark-muted: #8d8b85;
+  --border: rgba(22, 30, 45, 0.08);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+
+  --accent: #8b3a3a;
+  --accent-soft: #c97b7b;
+  --accent-on: #ffffff;
+  --success: #4a7c59;
+  --warning: #c2a04e;
+  --danger: #a13b3b;
+  --ring: rgba(139, 58, 58, 0.25);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  --transition-fast: 80ms ease;
+  --transition-base: 180ms ease-out;
+
+  --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-app: #1a1110;
+    --bg-card: #221615;
+    --bg-hover: rgba(243, 233, 210, 0.04);
+    --fg-primary: #f3e9d2;
+    --fg-muted: #8d8b85;
+    --border: rgba(243, 233, 210, 0.08);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-app);
+  color: var(--fg-primary);
+  font: 14px/1.5 var(--font-stack);
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+/* Layout primitives */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  background: var(--bg-sidebar);
+  color: var(--fg-on-dark);
+  padding: var(--space-5) var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.brand {
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--fg-on-dark);
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-item.active {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.nav-icon-bottles {
+  background: var(--accent);
+}
+.nav-icon-recipes {
+  background: var(--warning);
+}
+.nav-icon-wine {
+  background: #5d6b85;
+}
+.nav-icon-settings {
+  background: #6f6c66;
+}
+
+.main {
+  padding: var(--space-6) var(--space-7);
+  overflow-y: auto;
+}
+
+.page-title {
+  font-size: 28px;
+  line-height: 1.1;
+  margin-bottom: var(--space-2);
+}
+
+.page-subtitle {
+  color: var(--fg-muted);
+  margin-bottom: var(--space-6);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-card);
+}
+
+.empty-state {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-7);
+  text-align: center;
+  color: var(--fg-muted);
+}
+
+.empty-state h3 {
+  color: var(--fg-primary);
+  margin-bottom: var(--space-2);
+}
+
+.empty-state p {
+  margin: 0 0 var(--space-5);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--fg-primary);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.btn:hover {
+  background: var(--bg-hover);
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-on);
+}
+
+.btn-primary:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent-soft);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Status badges */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-ready {
+  background: rgba(74, 124, 89, 0.12);
+  color: var(--success);
+}
+
+.badge-building {
+  background: rgba(194, 160, 78, 0.12);
+  color: var(--warning);
+}
+
+.badge-error {
+  background: rgba(161, 59, 59, 0.12);
+  color: var(--danger);
+}
+
+.badge-muted {
+  background: var(--bg-hover);
+  color: var(--fg-muted);
+}

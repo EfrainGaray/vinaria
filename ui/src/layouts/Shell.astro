@@ -1,0 +1,49 @@
+---
+// The app shell: dark sidebar + main content area.
+// All real pages should render <slot /> into the .main element.
+interface Props {
+  title?: string;
+  active?: "bottles" | "recipes" | "wine" | "settings";
+}
+const { title = "Vinaria", active = "bottles" } = Astro.props;
+import "../styles/global.css";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span>🍷</span>
+          <span>Vinaria</span>
+        </div>
+        <nav class="nav">
+          <a class={`nav-item ${active === "bottles" ? "active" : ""}`} href="/">
+            <span class="nav-icon nav-icon-bottles">B</span>
+            <span>Bottles</span>
+          </a>
+          <a class={`nav-item ${active === "recipes" ? "active" : ""}`} href="/recipes">
+            <span class="nav-icon nav-icon-recipes">R</span>
+            <span>Recipes</span>
+          </a>
+          <a class={`nav-item ${active === "wine" ? "active" : ""}`} href="/wine">
+            <span class="nav-icon nav-icon-wine">W</span>
+            <span>Wine</span>
+          </a>
+          <a class={`nav-item ${active === "settings" ? "active" : ""}`} href="/settings">
+            <span class="nav-icon nav-icon-settings">S</span>
+            <span>Settings</span>
+          </a>
+        </nav>
+      </aside>
+      <main class="main">
+        <slot />
+      </main>
+    </div>
+  </body>
+</html>
