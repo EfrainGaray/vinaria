@@ -4,6 +4,7 @@ target/
 node_modules/
 dist/
 .tauri/
+.astro/
 *.log
 
 # OS
