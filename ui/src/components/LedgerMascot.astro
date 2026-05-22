@@ -1,0 +1,67 @@
+---
+// Logs module mascot — an open ledger book.
+---
+
+<svg viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="ledgerCover" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(58,139,90,0.95)" />
+      <stop offset="100%" stop-color="rgba(28,80,50,0.95)" />
+    </linearGradient>
+    <linearGradient id="ledgerPage" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(248,248,240,0.95)" />
+      <stop offset="100%" stop-color="rgba(220,220,210,0.85)" />
+    </linearGradient>
+  </defs>
+
+  <!-- back cover (skewed) -->
+  <path
+    d="M 36 80 L 120 60 L 204 80 L 204 260 L 120 280 L 36 260 Z"
+    fill="url(#ledgerCover)"
+    stroke="rgba(20,60,35,0.7)"
+    stroke-width="1.5"
+  />
+
+  <!-- spine -->
+  <path
+    d="M 120 60 L 120 280"
+    stroke="rgba(20,60,35,0.85)"
+    stroke-width="2.5"
+  />
+
+  <!-- left page -->
+  <path
+    d="M 44 86 L 118 70 L 118 270 L 44 254 Z"
+    fill="url(#ledgerPage)"
+  />
+  <!-- right page -->
+  <path
+    d="M 122 70 L 196 86 L 196 254 L 122 270 Z"
+    fill="url(#ledgerPage)"
+  />
+
+  <!-- left page lines -->
+  <g fill="rgba(70,90,80,0.55)">
+    <rect x="52" y="106" width="56" height="2.5" rx="1" />
+    <rect x="52" y="124" width="48" height="2.5" rx="1" />
+    <rect x="52" y="142" width="58" height="2.5" rx="1" />
+    <rect x="52" y="160" width="44" height="2.5" rx="1" />
+    <rect x="52" y="178" width="56" height="2.5" rx="1" />
+    <rect x="52" y="196" width="50" height="2.5" rx="1" />
+    <rect x="52" y="214" width="58" height="2.5" rx="1" />
+  </g>
+
+  <!-- right page lines -->
+  <g fill="rgba(70,90,80,0.55)">
+    <rect x="130" y="106" width="56" height="2.5" rx="1" />
+    <rect x="130" y="124" width="48" height="2.5" rx="1" />
+    <rect x="130" y="142" width="58" height="2.5" rx="1" />
+    <rect x="130" y="160" width="42" height="2.5" rx="1" />
+    <rect x="130" y="178" width="56" height="2.5" rx="1" />
+    <rect x="130" y="196" width="50" height="2.5" rx="1" />
+    <rect x="130" y="214" width="60" height="2.5" rx="1" />
+  </g>
+
+  <!-- highlight on left page -->
+  <rect x="52" y="160" width="44" height="6" fill="rgba(76,209,120,0.3)" rx="1" />
+</svg>

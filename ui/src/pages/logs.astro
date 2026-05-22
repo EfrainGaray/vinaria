@@ -1,0 +1,38 @@
+---
+import Shell from "../layouts/Shell.astro";
+import LedgerMascot from "../components/LedgerMascot.astro";
+
+// Phase-xp: empty state for now. Phase 4/5 will surface live log streams
+// per bottle via Tauri events.
+const logs: { ts: string; bottle: string; level: string; line: string }[] = [];
+---
+
+<Shell title="Vinaria — Logs" module="logs" topbarLabel="Logs">
+  {logs.length === 0 ? (
+    <section class="hero">
+      <div class="hero-art"><LedgerMascot /></div>
+      <div>
+        <h1 class="hero-title">Logs</h1>
+        <p class="hero-subtitle">
+          Per-bottle launch and crash logs, streaming in real time. Open a
+          bottle from the Bottles screen to start writing here.
+        </p>
+        <ul class="feature-list">
+          <li><span class="feature-icon">◆</span>Live tail of Wine stderr</li>
+          <li><span class="feature-icon">◆</span>Filter by bottle or severity</li>
+          <li><span class="feature-icon">◆</span>One-click attach to bug reports</li>
+        </ul>
+      </div>
+    </section>
+  ) : (
+    <div class="card-grid">
+      {logs.map((l) => (
+        <article class="card">
+          <h3>{l.bottle}</h3>
+          <p class="meta">{l.ts} · {l.level}</p>
+          <pre style="margin: 8px 0 0; font-size: 12px; color: var(--fg-muted); white-space: pre-wrap;">{l.line}</pre>
+        </article>
+      ))}
+    </div>
+  )}
+</Shell>

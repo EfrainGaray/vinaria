@@ -1,0 +1,55 @@
+---
+import Shell from "../layouts/Shell.astro";
+import ScrollMascot from "../components/ScrollMascot.astro";
+
+// Phase-xp: recipe catalog is read from recipes/*.toml at build/runtime.
+// For now the list is hardcoded to surface the design.
+const recipes: { id: string; name: string; appId?: number; status: string }[] = [
+  { id: "norland", name: "Norland", appId: 1857090, status: "ready" },
+];
+---
+
+<Shell title="Vinaria — Recipes" module="recipes" topbarLabel="Recipes">
+  {recipes.length === 0 ? (
+    <section class="hero">
+      <div class="hero-art"><ScrollMascot /></div>
+      <div>
+        <h1 class="hero-title">Recipes</h1>
+        <p class="hero-subtitle">
+          A recipe is a TOML file that knows how to set up a bottle for one
+          specific Windows app — registry tweaks, DLL overrides, launch env.
+        </p>
+        <ul class="feature-list">
+          <li><span class="feature-icon">◆</span>Community-contributed catalog</li>
+          <li><span class="feature-icon">◆</span>Plain-text, diffable, reviewable</li>
+          <li><span class="feature-icon">◆</span>Override locally in ~/.vinaria/recipes/</li>
+        </ul>
+      </div>
+    </section>
+  ) : (
+    <>
+      <section class="hero">
+        <div class="hero-art"><ScrollMascot /></div>
+        <div>
+          <h1 class="hero-title">Recipes</h1>
+          <p class="hero-subtitle">
+            {recipes.length} recipe{recipes.length === 1 ? "" : "s"} ready to install.
+          </p>
+        </div>
+      </section>
+      <div class="card-grid">
+        {recipes.map((r) => (
+          <article class="card">
+            <h3>{r.name}</h3>
+            <p class="meta">
+              id · {r.id}
+              {r.appId && <> · steam {r.appId}</>}
+            </p>
+            <span class={`badge ${r.status}`}>{r.status}</span>
+          </article>
+        ))}
+      </div>
+    </>
+  )}
+  <button class="fab">Add recipe</button>
+</Shell>

@@ -1,0 +1,48 @@
+---
+// Wine module mascot — a wooden cellar barrel.
+---
+
+<svg viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="barrelWood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(140,100,70,0.95)" />
+      <stop offset="50%" stop-color="rgba(160,115,80,0.95)" />
+      <stop offset="100%" stop-color="rgba(110,75,50,0.95)" />
+    </linearGradient>
+    <linearGradient id="barrelHoop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(180,180,190,0.95)" />
+      <stop offset="100%" stop-color="rgba(110,115,130,0.95)" />
+    </linearGradient>
+  </defs>
+
+  <!-- barrel body -->
+  <ellipse cx="120" cy="160" rx="92" ry="120" fill="url(#barrelWood)" />
+
+  <!-- vertical staves -->
+  <g stroke="rgba(80,55,30,0.4)" stroke-width="1.5" fill="none">
+    <path d="M 60 90  Q 56 160, 60 230" />
+    <path d="M 90 60  Q 86 160, 90 260" />
+    <path d="M 120 50 Q 120 160, 120 270" />
+    <path d="M 150 60 Q 154 160, 150 260" />
+    <path d="M 180 90 Q 184 160, 180 230" />
+  </g>
+
+  <!-- top ellipse (lid) -->
+  <ellipse cx="120" cy="50" rx="42" ry="10" fill="rgba(90,60,35,0.95)" />
+  <ellipse cx="120" cy="50" rx="42" ry="10" fill="none" stroke="rgba(60,40,20,0.7)" stroke-width="1.5" />
+
+  <!-- iron hoops -->
+  <ellipse cx="120" cy="80"  rx="86" ry="9" fill="url(#barrelHoop)" />
+  <ellipse cx="120" cy="160" rx="92" ry="11" fill="url(#barrelHoop)" />
+  <ellipse cx="120" cy="240" rx="86" ry="9" fill="url(#barrelHoop)" />
+
+  <!-- highlight -->
+  <ellipse
+    cx="84" cy="130" rx="14" ry="60"
+    fill="rgba(255,255,255,0.15)"
+  />
+
+  <!-- spigot -->
+  <rect x="116" y="200" width="8" height="14" rx="1.5" fill="rgba(60,55,40,0.95)" />
+  <rect x="112" y="212" width="16" height="6" rx="1.5" fill="rgba(60,55,40,0.95)" />
+</svg>

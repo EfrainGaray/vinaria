@@ -1,0 +1,58 @@
+---
+import Shell from "../layouts/Shell.astro";
+import GearMascot from "../components/GearMascot.astro";
+
+// Phase-xp: settings shape is mocked until Tauri-backed ConfigStore exists.
+const settings = {
+  wineDir: "~/.vinaria/wine",
+  bottlesDir: "~/.vinaria/bottles",
+  recipesDir: "~/.vinaria/recipes",
+  autoUpdateRecipes: false,
+  telemetry: false,
+};
+---
+
+<Shell title="Vinaria — Settings" module="settings" topbarLabel="Settings">
+  <section class="hero">
+    <div class="hero-art"><GearMascot /></div>
+    <div>
+      <h1 class="hero-title">Settings</h1>
+      <p class="hero-subtitle">
+        Vinaria reads and writes only what you see here. Edit values directly
+        in ~/.vinaria/config.toml if you prefer that flow.
+      </p>
+    </div>
+  </section>
+
+  <div class="card-grid">
+    <article class="card">
+      <h3>Wine install</h3>
+      <p class="meta">{settings.wineDir}</p>
+      <span class="badge ready">linked</span>
+    </article>
+    <article class="card">
+      <h3>Bottles directory</h3>
+      <p class="meta">{settings.bottlesDir}</p>
+      <span class="badge ready">writable</span>
+    </article>
+    <article class="card">
+      <h3>Recipes directory</h3>
+      <p class="meta">{settings.recipesDir}</p>
+      <span class="badge ready">writable</span>
+    </article>
+    <article class="card">
+      <h3>Auto-update recipes</h3>
+      <p class="meta">Pull from the community catalog on launch.</p>
+      <span class={`badge ${settings.autoUpdateRecipes ? "ready" : ""}`}>
+        {settings.autoUpdateRecipes ? "on" : "off"}
+      </span>
+    </article>
+    <article class="card">
+      <h3>Telemetry</h3>
+      <p class="meta">Anonymous crash reports. Never enabled by default.</p>
+      <span class={`badge ${settings.telemetry ? "ready" : ""}`}>
+        {settings.telemetry ? "on" : "off"}
+      </span>
+    </article>
+  </div>
+</Shell>
