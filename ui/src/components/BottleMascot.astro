@@ -1,0 +1,80 @@
+---
+// A flat-but-glossy SVG wine bottle that anchors the Bottles hero.
+// Drawn from scratch — no external assets.
+---
+
+<svg viewBox="0 0 240 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <linearGradient id="glass" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.25)" />
+      <stop offset="40%" stop-color="rgba(255,255,255,0.10)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0.04)" />
+    </linearGradient>
+    <linearGradient id="liquid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(139,58,58,0.7)" />
+      <stop offset="100%" stop-color="rgba(60,15,15,0.85)" />
+    </linearGradient>
+    <radialGradient id="shine" cx="0.3" cy="0.2" r="0.6">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.4)" />
+      <stop offset="100%" stop-color="rgba(255,255,255,0)" />
+    </radialGradient>
+  </defs>
+
+  <!-- bottle silhouette -->
+  <path
+    d="M 96 30 L 144 30 L 144 90
+       C 144 100, 168 110, 180 150
+       C 188 180, 188 220, 188 270
+       Q 188 300, 158 300 L 82 300
+       Q 52 300, 52 270
+       C 52 220, 52 180, 60 150
+       C 72 110, 96 100, 96 90 Z"
+    fill="url(#glass)"
+    stroke="rgba(255,255,255,0.18)"
+    stroke-width="1.5"
+  />
+  <!-- liquid level -->
+  <path
+    d="M 64 180
+       C 60 200, 60 240, 60 270
+       Q 60 296, 84 296 L 156 296
+       Q 180 296, 180 270
+       C 180 240, 180 200, 176 180 Z"
+    fill="url(#liquid)"
+  />
+  <!-- label -->
+  <rect
+    x="76" y="200" width="88" height="64"
+    rx="6"
+    fill="rgba(255,255,255,0.85)"
+  />
+  <text
+    x="120" y="232"
+    text-anchor="middle"
+    font-family="-apple-system, sans-serif"
+    font-size="14"
+    font-weight="600"
+    fill="rgba(80,30,30,0.9)"
+  >Vinaria</text>
+  <text
+    x="120" y="250"
+    text-anchor="middle"
+    font-family="-apple-system, sans-serif"
+    font-size="10"
+    fill="rgba(80,30,30,0.6)"
+    letter-spacing="2"
+  >EST. 2026</text>
+  <!-- cork -->
+  <rect x="96" y="14" width="48" height="18" rx="3" fill="rgba(120,86,40,0.8)" />
+  <!-- shine -->
+  <path
+    d="M 96 30 L 144 30 L 144 90
+       C 144 100, 168 110, 180 150
+       C 188 180, 188 220, 188 270
+       Q 188 300, 158 300 L 82 300
+       Q 52 300, 52 270
+       C 52 220, 52 180, 60 150
+       C 72 110, 96 100, 96 90 Z"
+    fill="url(#shine)"
+  />
+</svg>

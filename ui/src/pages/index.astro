@@ -1,30 +1,40 @@
 ---
 import Shell from "../layouts/Shell.astro";
+import BottleMascot from "../components/BottleMascot.astro";
 
-// Phase-xp stub: the bottle list is empty until the Tauri IPC contract is
-// wired up. Once src-tauri exposes list_bottles, this page will hydrate
-// from the invoke handler.
+// Phase-xp stub: the bottle list is empty until Tauri IPC list_bottles is
+// wired. When populated, this page switches from hero+empty to a card grid.
 const bottles: { id: string; name: string; recipe?: string; status: string }[] = [];
 ---
 
-<Shell title="Vinaria — Bottles" active="bottles">
-  <h1 class="page-title">Bottles</h1>
-  <p class="page-subtitle">Windows applications running through your Wine install.</p>
-
+<Shell title="Vinaria — Bottles" module="bottles" topbarLabel="Bottles">
   {bottles.length === 0 ? (
-    <div class="empty-state">
-      <h3>No bottles yet</h3>
-      <p>A bottle is one Windows app set up to run on your Mac. Start with the recipe catalog or import an existing Wine prefix.</p>
-      <button class="btn btn-primary">Install application</button>
-    </div>
+    <section class="hero">
+      <div class="hero-art">
+        <BottleMascot />
+      </div>
+      <div>
+        <h1 class="hero-title">Bottles</h1>
+        <p class="hero-subtitle">
+          A bottle is one Windows app set up to run on your Mac. Pick a recipe
+          from the catalog or import an existing Wine prefix.
+        </p>
+        <ul class="feature-list">
+          <li><span class="feature-icon">◆</span>One-click install from recipe</li>
+          <li><span class="feature-icon">◆</span>Isolated Wine prefix per app</li>
+          <li><span class="feature-icon">◆</span>Launch directly from the dock</li>
+        </ul>
+      </div>
+    </section>
+    <button class="fab">Install</button>
   ) : (
     <div class="card-grid">
       {bottles.map((b) => (
-        <div class="card">
+        <article class="card">
           <h3>{b.name}</h3>
-          {b.recipe && <p style="color: var(--fg-muted); margin: 4px 0 12px;">recipe: {b.recipe}</p>}
-          <span class={`badge badge-${b.status}`}>{b.status}</span>
-        </div>
+          {b.recipe && <p class="meta">recipe · {b.recipe}</p>}
+          <span class={`badge ${b.status}`}>{b.status}</span>
+        </article>
       ))}
     </div>
   )}

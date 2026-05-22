@@ -1,30 +1,53 @@
-/* Vinaria design tokens. See docs/design-language.md for the rationale. */
+/* Vinaria design tokens. See docs/design-language.md for the rationale.
+ * Pattern: dark mode only, per-module radial gradient background, glass cards,
+ * floating action button. Inspired by CleanMyMac without copying any assets.
+ */
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
 
-  --bg-app: #f4f3ee;
-  --bg-sidebar: #161e2d;
-  --bg-card: #ffffff;
-  --bg-hover: rgba(22, 30, 45, 0.04);
-  --fg-primary: #1a1a1f;
-  --fg-muted: #6f6c66;
-  --fg-on-dark: #f3e9d2;
-  --fg-on-dark-muted: #8d8b85;
-  --border: rgba(22, 30, 45, 0.08);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  /* base surfaces */
+  --bg-app-base: #0a0a0d;
+  --bg-card: rgba(255, 255, 255, 0.06);
+  --bg-card-strong: rgba(255, 255, 255, 0.1);
+  --border-glass: rgba(255, 255, 255, 0.1);
 
-  --accent: #8b3a3a;
-  --accent-soft: #c97b7b;
-  --accent-on: #ffffff;
-  --success: #4a7c59;
-  --warning: #c2a04e;
-  --danger: #a13b3b;
-  --ring: rgba(139, 58, 58, 0.25);
+  /* foreground */
+  --fg-primary: #ffffff;
+  --fg-muted: rgba(255, 255, 255, 0.6);
+  --fg-faint: rgba(255, 255, 255, 0.35);
+  --ring: rgba(255, 255, 255, 0.2);
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  /* module colors */
+  --mod-bottles-hero: #8b3a3a;
+  --mod-bottles-deep: #1a0a0a;
+  --mod-recipes-hero: #c2a04e;
+  --mod-recipes-deep: #1f1607;
+  --mod-wine-hero: #5d6b85;
+  --mod-wine-deep: #0d1018;
+  --mod-settings-hero: #6f6c66;
+  --mod-settings-deep: #14130f;
+  --mod-logs-hero: #3a8b5a;
+  --mod-logs-deep: #07140d;
+
+  /* default to bottles, overridden by [data-module] on body */
+  --mod-hero: var(--mod-bottles-hero);
+  --mod-deep: var(--mod-bottles-deep);
+
+  /* states */
+  --ok: #4cd178;
+  --warn: #f0b84a;
+  --danger: #ff5c4d;
+
+  /* CTA */
+  --cta-amber: #f5c845;
+  --cta-amber-fg: #1a1402;
+
+  /* layout */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -32,24 +55,34 @@
   --space-5: 24px;
   --space-6: 32px;
   --space-7: 48px;
+  --space-8: 64px;
 
-  --transition-fast: 80ms ease;
-  --transition-base: 180ms ease-out;
+  --transition-fast: 120ms ease;
+  --transition-base: 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-    "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+    "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg-app: #1a1110;
-    --bg-card: #221615;
-    --bg-hover: rgba(243, 233, 210, 0.04);
-    --fg-primary: #f3e9d2;
-    --fg-muted: #8d8b85;
-    --border: rgba(243, 233, 210, 0.08);
-    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.4);
-  }
+body[data-module="bottles"] {
+  --mod-hero: var(--mod-bottles-hero);
+  --mod-deep: var(--mod-bottles-deep);
+}
+body[data-module="recipes"] {
+  --mod-hero: var(--mod-recipes-hero);
+  --mod-deep: var(--mod-recipes-deep);
+}
+body[data-module="wine"] {
+  --mod-hero: var(--mod-wine-hero);
+  --mod-deep: var(--mod-wine-deep);
+}
+body[data-module="settings"] {
+  --mod-hero: var(--mod-settings-hero);
+  --mod-deep: var(--mod-settings-deep);
+}
+body[data-module="logs"] {
+  --mod-hero: var(--mod-logs-hero);
+  --mod-deep: var(--mod-logs-deep);
 }
 
 * {
@@ -60,211 +93,325 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: var(--bg-app);
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 90% 80% at 50% 38%, var(--mod-hero) 0%, var(--mod-deep) 60%, var(--bg-app-base) 100%);
   color: var(--fg-primary);
-  font: 14px/1.5 var(--font-stack);
-  -webkit-font-smoothing: antialiased;
+  font: 16px/1.55 var(--font-stack);
   font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--transition-base);
+  overflow-x: hidden;
 }
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   margin: 0;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
 }
 
 button {
   font: inherit;
   cursor: pointer;
+  color: inherit;
+  border: 0;
+  background: transparent;
 }
 
-/* Layout primitives */
+/* ---------- shell ---------- */
 
 .app-shell {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: 76px 1fr;
   min-height: 100vh;
 }
 
 .sidebar {
-  background: var(--bg-sidebar);
-  color: var(--fg-on-dark);
   padding: var(--space-5) var(--space-3);
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
-}
-
-.brand {
-  font-size: 18px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 0 var(--space-2);
-}
-
-.nav {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.nav-item {
-  display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  color: var(--fg-on-dark);
-  text-decoration: none;
-  transition: background var(--transition-fast);
+  background: rgba(0, 0, 0, 0.18);
+  border-right: 1px solid var(--border-glass);
 }
 
-.nav-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.nav-item.active {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.nav-icon {
-  width: 20px;
-  height: 20px;
-  border-radius: 6px;
+.brand-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 11px;
-  font-weight: 700;
-  color: white;
-  flex-shrink: 0;
+  font-size: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  margin-bottom: var(--space-3);
 }
 
-.nav-icon-bottles {
-  background: var(--accent);
+.nav-icon {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--fg-muted);
+  transition: background var(--transition-fast), color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  text-decoration: none;
+  font-size: 18px;
 }
-.nav-icon-recipes {
-  background: var(--warning);
+
+.nav-icon:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--fg-primary);
 }
-.nav-icon-wine {
-  background: #5d6b85;
+
+.nav-icon.active {
+  background: color-mix(in srgb, var(--mod-hero) 25%, transparent);
+  color: var(--fg-primary);
+  box-shadow: 0 0 0 2px var(--mod-hero);
 }
-.nav-icon-settings {
-  background: #6f6c66;
+
+.nav-icon .dot {
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--warn);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.4);
 }
+
+/* ---------- main ---------- */
 
 .main {
-  padding: var(--space-6) var(--space-7);
-  overflow-y: auto;
+  padding: var(--space-8) var(--space-8) calc(var(--space-8) + 96px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 }
 
-.page-title {
-  font-size: 28px;
-  line-height: 1.1;
-  margin-bottom: var(--space-2);
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
 }
 
-.page-subtitle {
+.topbar-title {
+  font-size: 13px;
+  color: var(--fg-faint);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.cta-amber {
+  background: var(--cta-amber);
+  color: var(--cta-amber-fg);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 13px;
+  transition: filter var(--transition-fast);
+}
+
+.cta-amber:hover {
+  filter: brightness(1.05);
+}
+
+/* ---------- hero ---------- */
+
+.hero {
+  display: grid;
+  grid-template-columns: 38% 1fr;
+  align-items: center;
+  gap: var(--space-7);
+  min-height: 60vh;
+}
+
+.hero-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-art svg {
+  width: 280px;
+  height: 280px;
+  filter: drop-shadow(0 24px 40px rgba(0, 0, 0, 0.4));
+}
+
+.hero-title {
+  font-size: 44px;
+  line-height: 1.05;
+  margin-bottom: var(--space-3);
+}
+
+.hero-subtitle {
+  font-size: 16px;
   color: var(--fg-muted);
+  max-width: 42ch;
   margin-bottom: var(--space-6);
 }
 
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-weight: 500;
+}
+
+.feature-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--mod-hero) 60%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+/* ---------- cards / lists ---------- */
+
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: var(--space-4);
 }
 
 .card {
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
-  box-shadow: var(--shadow-card);
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.empty-state {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--space-7);
-  text-align: center;
-  color: var(--fg-muted);
+.card:hover {
+  background: var(--bg-card-strong);
+  box-shadow: 0 0 0 1px var(--ring);
 }
 
-.empty-state h3 {
-  color: var(--fg-primary);
+.card h3 {
+  font-size: 18px;
   margin-bottom: var(--space-2);
 }
 
-.empty-state p {
-  margin: 0 0 var(--space-5);
+.card .meta {
+  color: var(--fg-muted);
+  font-size: 13px;
+  margin-bottom: var(--space-3);
 }
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border);
-  background: var(--bg-card);
+/* ---------- FAB ---------- */
+
+.fab {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--mod-hero);
   color: var(--fg-primary);
-  transition: background var(--transition-fast), border-color var(--transition-fast);
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.06),
+    0 8px 32px color-mix(in srgb, var(--mod-hero) 80%, transparent),
+    0 16px 64px color-mix(in srgb, var(--mod-hero) 50%, transparent);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
 }
 
-.btn:hover {
-  background: var(--bg-hover);
+.fab:hover {
+  transform: translateX(-50%) translateY(-2px);
+  filter: brightness(1.08);
 }
 
-.btn-primary {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: var(--accent-on);
+.fab:active {
+  transform: translateX(-50%) translateY(0);
 }
 
-.btn-primary:hover {
-  background: var(--accent-soft);
-  border-color: var(--accent-soft);
-}
-
-.btn:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
-}
-
-/* Status badges */
+/* ---------- status badges ---------- */
 
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
-  padding: 2px var(--space-2);
+  gap: 6px;
+  padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 500;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
 }
 
-.badge-ready {
-  background: rgba(74, 124, 89, 0.12);
-  color: var(--success);
+.badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--fg-faint);
 }
 
-.badge-building {
-  background: rgba(194, 160, 78, 0.12);
-  color: var(--warning);
+.badge.ready::before {
+  background: var(--ok);
+}
+.badge.building::before {
+  background: var(--warn);
+  box-shadow: 0 0 8px var(--warn);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+.badge.error::before {
+  background: var(--danger);
 }
 
-.badge-error {
-  background: rgba(161, 59, 59, 0.12);
-  color: var(--danger);
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
-.badge-muted {
-  background: var(--bg-hover);
+/* ---------- empty state ---------- */
+
+.empty-state {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  text-align: center;
+}
+
+.empty-state h2 {
+  font-size: 24px;
+  margin-bottom: var(--space-2);
+}
+
+.empty-state p {
   color: var(--fg-muted);
+  max-width: 50ch;
+  margin: 0 auto var(--space-6);
 }

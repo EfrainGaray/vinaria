@@ -1,118 +1,196 @@
 # Design Language
 
 Vinaria's UI is **inspired by CleanMyMac** — the visual posture of a friendly
-macOS utility that does serious work behind the scenes. Big legible state,
-calm animations, a sidebar that always knows where you are.
+macOS utility that does serious work behind the scenes. Big bold titles,
+a moody dark theme that changes color per module, a single floating action
+button at the bottom, calm glassmorphic 3D art.
 
 > We **do not** vendor or copy any assets from CleanMyMac (or any other
-> proprietary app). This document captures the *spirit* of the design and
-> reimplements it from scratch in CSS.
+> proprietary app). This document captures the *spirit* of the design,
+> distilled from public screenshots, and reimplements it from scratch.
 
-## Voice
+## Core posture
 
-- **Friendly but precise.** "12 bottles ready" beats "Bottles: 12".
-- **Action-oriented.** Primary buttons name what they do, not what they are
-  ("Install Norland", not "Submit").
-- **Honest about state.** "Building Wine (4 of 7 phases)" beats a spinner.
+1. **Always dark.** No light mode — that's CleanMyMac's signature. Each module
+   has its own color identity that bathes the whole screen.
+2. **Sidebar is icon-only.** Just colored badges, no labels. The active item
+   gets a thick colored ring + tinted background.
+3. **One floating action button.** A big circular button at the bottom-center
+   ("Analyze" in CleanMyMac, "Install" / "Launch" for us). It glows in the
+   module's color and is *the* primary action.
+4. **3D glassmorphic mascot.** Every module has a translucent, slightly tilted
+   3D object as its visual anchor on the left side of the main pane.
+5. **Generous padding.** ~64px from the edges to content. Cards breathe.
 
-## Layout primitives
+## Per-module color signature
+
+CleanMyMac assigns one color per top-level concept. The whole screen takes that
+color: radial gradient from the center outward, vignetting to near-black at
+the corners. We adopt the same pattern.
 
 ```
-┌─────────┬──────────────────────────────────────────────┐
-│         │                                              │
-│ Sidebar │           Main content area                  │
-│  dark   │              (light or dark)                 │
-│  navy   │                                              │
-│         │   ┌────────────┐  ┌────────────┐             │
-│  nav    │   │   Card     │  │   Card     │             │
-│  items  │   │            │  │            │             │
-│         │   └────────────┘  └────────────┘             │
-│         │                                              │
-└─────────┴──────────────────────────────────────────────┘
+Bottles      → wine red    (#8b3a3a base, radial → #1a0a0a)
+Recipes      → gold        (#c2a04e base, radial → #1f1607)
+Wine install → slate blue  (#5d6b85 base, radial → #0d1018)
+Settings     → graphite    (#6f6c66 base, radial → #14130f)
+Logs         → emerald     (#3a8b5a base, radial → #07140d)
 ```
 
-- **Sidebar** ~ 220px wide, dark navy (#161e2d), white labels, colored icon
-  squares (8-10px radius) to the left of each label.
-- **Main area** light by default (#f4f3ee — warm off-white, our "vellum"),
-  dark mode auto-respected.
-- **Cards** with 12-16px corner radius, faint 1-pixel border + subtle shadow
-  (0 1px 3px rgba(0,0,0,0.04)). No heavy drop shadows.
+The base color is the saturated hero hue. The vignette is the deep variant.
+A subtle inner glow (radial-gradient at 30% opacity) softens the center.
 
 ## Palette (phase-xp)
 
 ```
---bg-app:      #f4f3ee   /* vellum — warm off-white */
---bg-sidebar:  #161e2d   /* navy ink */
---bg-card:     #ffffff
---fg-primary:  #1a1a1f
---fg-muted:    #6f6c66
---fg-on-dark:  #f3e9d2
---accent:      #8b3a3a   /* wine red — primary actions */
---accent-soft: #c97b7b
---success:     #4a7c59
---warning:     #c2a04e
---danger:      #a13b3b
---ring:        rgba(139, 58, 58, 0.25)
+--bg-app-base:    #0a0a0d   /* deep neutral when no module focus    */
+--bg-card:        rgba(255, 255, 255, 0.06)  /* glass cards on the gradient */
+--bg-card-strong: rgba(255, 255, 255, 0.10)
+--border-glass:   rgba(255, 255, 255, 0.10)
+--fg-primary:     #ffffff
+--fg-muted:       rgba(255, 255, 255, 0.60)
+--fg-faint:       rgba(255, 255, 255, 0.35)
+
+/* module colors (hero / vignette) */
+--mod-bottles-hero:    #8b3a3a
+--mod-bottles-deep:    #1a0a0a
+--mod-recipes-hero:    #c2a04e
+--mod-recipes-deep:    #1f1607
+--mod-wine-hero:       #5d6b85
+--mod-wine-deep:       #0d1018
+--mod-settings-hero:   #6f6c66
+--mod-settings-deep:   #14130f
+
+/* states */
+--ok:       #4cd178
+--warn:     #f0b84a
+--danger:   #ff5c4d
+--ring:     rgba(255, 255, 255, 0.20)
+
+/* premium CTA (top-right amber pill) */
+--cta-amber:    #f5c845
+--cta-amber-fg: #1a1402
 ```
 
-Dark mode swaps `--bg-app` to `#1a1110` and `--bg-card` to `#221615`. The
-sidebar stays dark in both modes — that's the whole point of the look.
+## Sidebar
+
+- Width 76px, full height, dark vertical strip on a slight gradient that
+  matches the active module color at 30% opacity.
+- Vertical stack of 40×40 icon badges with 10px radius.
+- Active item: 2px outer ring in the module color + module-tinted background.
+- Hover: 8% white background.
+- Tiny status dot in the bottom-left of a badge if that module has alerts.
+
+## Hero area
+
+```
+┌──┬──────────────────────────────────────────────────────────────┐
+│  │   [3D mascot, big, glass effect]      Module Title (44px)    │
+│  │                                       One sentence subtitle. │
+│  │                                                              │
+│  │                                       ● Feature 1            │
+│sb│                                       ● Feature 2            │
+│  │                                       ● Feature 3            │
+│  │                                                              │
+│  │                                                              │
+│  │                          (   Action   ) ← floating CTA       │
+└──┴──────────────────────────────────────────────────────────────┘
+```
+
+- Two-column layout: 3D mascot left (~38%), text right (~62%).
+- Title 44px / 600, subtitle 16px / muted.
+- Feature list: 24px circle icon (module color) + label, 12px gap between.
+- Floating action button: 84px circle, position fixed at bottom-center 32px
+  above bottom edge, big shadow glowing in the module color.
+
+## Cards / lists
+
+When there's actual data (bottles, recipes, log entries), it lives in glass
+cards that float on top of the gradient.
+
+- Background: `--bg-card` (6% white) with `backdrop-filter: blur(20px)`.
+- Border: 1px `--border-glass`.
+- Radius: 16px.
+- Padding: 20-24px.
+- Hover: lift to `--bg-card-strong` and ring `--ring`.
+
+## Floating action button
+
+The single most important UI element on each module screen.
+
+```css
+.fab {
+  position: fixed;
+  bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  width: 84px; height: 84px;
+  border-radius: 50%;
+  background: var(--mod-hero);
+  box-shadow:
+    0 0 0 4px rgba(255,255,255,0.06),
+    0 8px 32px var(--mod-hero),
+    0 16px 64px var(--mod-hero);
+  color: white;
+  font-weight: 600;
+}
+```
+
+## Top bar
+
+Minimal. Window controls on the left (handled by macOS), module name
+centered in the title bar area, and the amber **"Unlock full version"** pill
+at the right when relevant. For Vinaria the pill is "Star on GitHub" instead
+of an unlock — same prominence, different goal.
 
 ## Typography
 
-- **System UI stack first** (`-apple-system`, then SF Pro fallback, then
-  generic sans-serif). Keeps weight under 1KB before any custom font loads.
-- **Sizes:**
-  - Display 28px / 1.1 / 600 (page titles, bottle hero numbers)
-  - Title 18px / 1.3 / 600 (card headers)
-  - Body 14px / 1.5 / 400
-  - Small 12px / 1.4 / 500 (badges, metadata)
-- **Numerals:** `font-variant-numeric: tabular-nums` on stats so columns line
-  up. CleanMyMac does this on every counter.
-
-## Iconography
-
-- 20×20 icons with 8px-radius colored backgrounds (badge style), used in the
-  sidebar and on card headers.
-- One color per top-level concept: bottles (wine red), recipes (gold), Wine
-  install (slate), settings (gray). Helps with at-a-glance scanning.
+- **System UI stack** (`-apple-system`, `SF Pro Display`, fallback). Display
+  weight for titles.
+- Sizes:
+  - Hero 44px / 1.05 / 600
+  - Section 28px / 1.1 / 600
+  - Body 16px / 1.55 / 400 (a touch bigger than the previous spec; CleanMyMac
+    leans roomy)
+  - Caption 13px / 1.4 / 500
+- `font-variant-numeric: tabular-nums` everywhere.
 
 ## Motion
 
-- **Page transitions:** 180ms ease-out fade + 6px translate-y.
-- **List inserts/deletes:** 220ms cubic-bezier(0.2, 0.8, 0.2, 1) height +
-  opacity. No bouncy springs.
-- **Progress:** real progress bars, not indeterminate spinners. If we don't
-  know the percentage, show the current step name instead.
-- **Hover states:** 80ms ease. Subtle — no large transforms.
+- **Module transitions:** 240ms cross-fade of the background gradient color +
+  3D mascot. Bottom CTA recolors in the same beat.
+- **Sidebar select:** 120ms tinted ring grows from the badge.
+- **Cards entering a list:** 180ms ease-out, 8px translate-y + fade.
+- **No bouncy springs.** CleanMyMac's motion is calm, not playful.
 
-## Status badges
+## 3D mascots
 
-```
-●  ready          (success green)
-○  building       (neutral, animated dot)
-!  error          (danger red, bold)
-…  not configured (muted gray)
-```
+CleanMyMac has bespoke 3D illustrations per module. We won't reproduce those.
+For phase-xp we use **simple SVG + CSS** vignette mascots:
 
-Bottles always carry a badge. Recipes carry one too while they're applying.
+- A wine bottle (Bottles)
+- A scroll (Recipes)
+- A barrel (Wine install)
+- A gear (Settings)
 
-## Empty states
+These render as flat-but-glossy SVGs with a `backdrop-filter` halo to fake
+the glass effect. Phase-7 may upgrade to actual 3D via three.js if it's
+worth the bundle size.
 
-Three things, always: a one-line title, a one-sentence rationale, a primary
-action that creates the missing thing. Never a full-page illustration that
-takes attention away from the action.
+## Onboarding
 
-## Things we deliberately don't do
+The welcome modal pattern works for us too:
 
-- **No glassmorphism / heavy blur.** Performance + readability cost.
-- **No huge hero sections** on the home screen. Vinaria isn't a marketing
-  site; the home screen is the bottle list.
-- **No emojis as UI elements** except in the brand mark (🍷).
-- **No mystery-meat icons.** Every icon has a text label next to it.
+- Full-width modal centered, 920×540, rounded 24px corners.
+- Two columns: 3D art (~45%), copy + CTA (~55%).
+- Top progress stepper showing tour length.
+- Primary CTA in the module color.
 
-## Open design questions (phase-xp)
+For Vinaria the tour is 3 steps: build Wine → create your first bottle →
+install your first app via a recipe.
 
-- Sidebar collapsible? Probably not in v1 — desktop window is wide.
-- Multi-window? Definitely not. One Vinaria window.
-- Tray icon? Maybe v2.
+## What we deliberately don't do
+
+- **No 3D models in phase-xp.** Use SVG mascots — much faster, no bundle hit.
+- **No glassmorphism on text.** It hurts legibility. Cards only.
+- **No marketing-style hero on the home screen.** The bottle list IS the
+  home screen.
+- **No emojis except 🍷 in the brand mark.**

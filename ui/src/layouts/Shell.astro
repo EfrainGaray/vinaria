@@ -1,12 +1,23 @@
 ---
-// The app shell: dark sidebar + main content area.
-// All real pages should render <slot /> into the .main element.
+// App shell: icon-only sidebar + radial-gradient main area.
+// Active module sets a data attribute on <body> so CSS variables can color
+// the background, FAB, sidebar highlight, and feature icons in unison.
+import "../styles/global.css";
+
 interface Props {
   title?: string;
-  active?: "bottles" | "recipes" | "wine" | "settings";
+  module?: "bottles" | "recipes" | "wine" | "settings" | "logs";
+  topbarLabel?: string;
 }
-const { title = "Vinaria", active = "bottles" } = Astro.props;
-import "../styles/global.css";
+const { title = "Vinaria", module = "bottles", topbarLabel = "Bottles" } = Astro.props;
+
+const nav: { mod: NonNullable<Props["module"]>; label: string; glyph: string; href: string }[] = [
+  { mod: "bottles",  label: "Bottles",  glyph: "🍷", href: "/" },
+  { mod: "recipes",  label: "Recipes",  glyph: "📜", href: "/recipes" },
+  { mod: "wine",     label: "Wine",     glyph: "🪵", href: "/wine" },
+  { mod: "logs",     label: "Logs",     glyph: "≡",  href: "/logs" },
+  { mod: "settings", label: "Settings", glyph: "⚙",  href: "/settings" },
+];
 ---
 
 <html lang="en">
@@ -15,33 +26,33 @@ import "../styles/global.css";
     <meta name="viewport" content="width=device-width" />
     <title>{title}</title>
   </head>
-  <body>
+  <body data-module={module}>
     <div class="app-shell">
       <aside class="sidebar">
-        <div class="brand">
-          <span>🍷</span>
-          <span>Vinaria</span>
-        </div>
-        <nav class="nav">
-          <a class={`nav-item ${active === "bottles" ? "active" : ""}`} href="/">
-            <span class="nav-icon nav-icon-bottles">B</span>
-            <span>Bottles</span>
+        <div class="brand-mark" title="Vinaria">🍷</div>
+        {nav.map((n) => (
+          <a
+            class={`nav-icon ${n.mod === module ? "active" : ""}`}
+            href={n.href}
+            title={n.label}
+            aria-label={n.label}
+          >
+            <span>{n.glyph}</span>
           </a>
-          <a class={`nav-item ${active === "recipes" ? "active" : ""}`} href="/recipes">
-            <span class="nav-icon nav-icon-recipes">R</span>
-            <span>Recipes</span>
-          </a>
-          <a class={`nav-item ${active === "wine" ? "active" : ""}`} href="/wine">
-            <span class="nav-icon nav-icon-wine">W</span>
-            <span>Wine</span>
-          </a>
-          <a class={`nav-item ${active === "settings" ? "active" : ""}`} href="/settings">
-            <span class="nav-icon nav-icon-settings">S</span>
-            <span>Settings</span>
-          </a>
-        </nav>
+        ))}
       </aside>
       <main class="main">
+        <header class="topbar">
+          <div class="topbar-title">{topbarLabel}</div>
+          <a
+            class="cta-amber"
+            href="https://github.com/EfrainGaray/vinaria"
+            target="_blank"
+            rel="noopener"
+          >
+            ★ Star on GitHub
+          </a>
+        </header>
         <slot />
       </main>
     </div>
