@@ -1,0 +1,17 @@
+{
+  "name": "vinaria-ui",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Vinaria desktop UI — Astro frontend bundled into the Tauri shell.",
+  "scripts": {
+    "dev": "astro dev --port 4321",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5",
+    "@astrojs/check": "^0.9",
+    "typescript": "^5"
+  }
+}
