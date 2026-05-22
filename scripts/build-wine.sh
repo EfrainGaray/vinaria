@@ -28,6 +28,9 @@ if [ ! -d "$SRC_DIR" ]; then
   exit 1
 fi
 
+# Apply our macOS Sonoma patches before configure (idempotent).
+"$REPO_ROOT/scripts/patch-wine-sonoma.sh"
+
 # CodeWeavers source tarball bundles many components; Wine lives in `wine/`.
 # Use the fixed path so we don't accidentally pick another project's configure
 # (e.g. ghostscript) when the parent dir name contains "wine".
