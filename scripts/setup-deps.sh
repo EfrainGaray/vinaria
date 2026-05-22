@@ -20,6 +20,9 @@ PACKAGES=(
   pcre2
   pkg-config
   cmake
+  molten-vk
+  vulkan-loader
+  vulkan-headers
 )
 
 OPTIONAL_CASKS=(
