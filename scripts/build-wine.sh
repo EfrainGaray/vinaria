@@ -31,11 +31,12 @@ cd "$BUILD_DIR"
 # Homebrew prefix detection — Intel default is /usr/local
 BREW_PREFIX="$(brew --prefix)"
 
-# bison and flex from Homebrew are keg-only (macOS ships ancient 2.3 in /usr/bin).
-# Wine needs bison >= 3.0 and a recent flex. Prepend their kegs to PATH.
-export PATH="$BREW_PREFIX/opt/bison/bin:$BREW_PREFIX/opt/flex/bin:$PATH"
+# Prepend Homebrew keg-only tools that macOS either ships too old (bison) or
+# whose default /usr/bin/* are stubs that fail under partial Xcode CLT (m4).
+export PATH="$BREW_PREFIX/opt/bison/bin:$BREW_PREFIX/opt/flex/bin:$BREW_PREFIX/opt/m4/bin:$PATH"
 echo "==> Using bison: $(which bison) ($(bison --version | head -1))"
 echo "==> Using flex:  $(which flex) ($(flex --version | head -1))"
+echo "==> Using m4:    $(which m4) ($(m4 --version | head -1))"
 
 # Configure if not already done
 if [ ! -f Makefile ]; then

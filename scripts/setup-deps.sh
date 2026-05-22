@@ -6,6 +6,7 @@ set -euo pipefail
 PACKAGES=(
   bison
   flex
+  m4
   gettext
   mingw-w64
   freetype
