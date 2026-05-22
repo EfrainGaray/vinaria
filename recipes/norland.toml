@@ -1,0 +1,24 @@
+# Vinaria recipe — Norland
+# https://store.steampowered.com/app/1857090/
+
+id           = "norland"
+name         = "Norland"
+steam_app_id = 1857090
+windows_version = "win10"
+
+# Wine 11.9 vanilla on Intel Mac crashes Norland.exe inside dxgi when GameMaker's
+# Steamworks_x64 dll passes an enum where a pointer is expected. CrossOver's
+# patched wine builtin d3d11.dll + dxgi.dll resolve the crash. Recipes don't
+# bundle DLLs — the Wine version Vinaria ships is already built from CodeWeavers
+# source, so nothing extra is needed at recipe level. Left here as a note.
+[[registry]]
+key   = 'HKCU\Software\Wine\Direct3D'
+name  = 'cb_access_map_w'
+kind  = 'dword'
+value = 1
+
+[launch]
+executable = 'C:\Program Files (x86)\Steam\steamapps\common\Norland Story Generating Strategy\Norland.exe'
+
+[launch.env]
+WINEMSYNC = "1"
