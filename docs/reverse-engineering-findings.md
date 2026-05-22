@@ -59,3 +59,19 @@ CodeWeavers Wine source: https://github.com/CodeWeavers/wine — look for branch
 - Patches in `wined3d.dll` (core) or in d3d11/dxgi PE shims? Need to hash `wined3d.dll` next.
 - Does the fix survive `wineboot --update`?
 - Does this fix help other GameMaker titles? Other D3D11 indie games?
+
+---
+
+## Legal note on the Perl wrapper
+
+CrossOver's `bin/wine` Perl launcher script is **proprietary CodeWeavers IP**,
+not part of Wine. We studied it locally (analysis is fair use) to identify what
+env vars and path setup CrossOver does at launch time, but the script itself
+**is not vendored in this repo**. Phase 4's Rust ProcessSpawner reimplements the
+same launching concerns from scratch using Wine's documented environment
+contract (`WINEPREFIX`, `WINEDLLPATH`, `WINESERVER`, `WINELOADER`, etc.) — no
+code copied from CrossOver.
+
+Wine itself (the C source we build in phase 3) is LGPL and CodeWeavers
+distributes that openly at https://media.codeweavers.com/pub/crossover/source/.
+That tarball is what we compile against.
