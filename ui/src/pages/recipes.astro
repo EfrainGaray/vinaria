@@ -1,21 +1,15 @@
 ---
 import Shell from "../layouts/Shell.astro";
 import ScrollMascot from "../components/ScrollMascot.astro";
-
-// Phase-xp: recipe catalog is read from recipes/*.toml at build/runtime.
-// For now the list is hardcoded to surface the design.
-const recipes: { id: string; name: string; appId?: number; status: string }[] = [
-  { id: "norland", name: "Norland", appId: 1857090, status: "ready" },
-];
 ---
 
 <Shell title="Vinaria — Recipes" module="recipes" topbarLabel="Recipes">
-  {recipes.length === 0 ? (
-    <section class="hero">
+  <div id="recipes-root">
+    <section class="hero" id="recipes-hero">
       <div class="hero-art"><ScrollMascot /></div>
       <div>
-        <h1 class="hero-title">Recipes</h1>
-        <p class="hero-subtitle">
+        <h1 class="hero-title" id="recipes-title">Recipes</h1>
+        <p class="hero-subtitle" id="recipes-subtitle">
           A recipe is a TOML file that knows how to set up a bottle for one
           specific Windows app — registry tweaks, DLL overrides, launch env.
         </p>
@@ -26,30 +20,43 @@ const recipes: { id: string; name: string; appId?: number; status: string }[] = 
         </ul>
       </div>
     </section>
-  ) : (
-    <>
-      <section class="hero">
-        <div class="hero-art"><ScrollMascot /></div>
-        <div>
-          <h1 class="hero-title">Recipes</h1>
-          <p class="hero-subtitle">
-            {recipes.length} recipe{recipes.length === 1 ? "" : "s"} ready to install.
-          </p>
-        </div>
-      </section>
-      <div class="card-grid">
-        {recipes.map((r) => (
-          <article class="card">
-            <h3>{r.name}</h3>
-            <p class="meta">
-              id · {r.id}
-              {r.appId && <> · steam {r.appId}</>}
-            </p>
-            <span class={`badge ${r.status}`}>{r.status}</span>
-          </article>
-        ))}
-      </div>
-    </>
-  )}
-  <button class="fab">Add recipe</button>
+    <div class="card-grid" id="recipes-grid" style="display: none;"></div>
+  </div>
+  <button class="fab" id="recipes-fab">Add recipe</button>
 </Shell>
+
+<script>
+  import { listRecipes } from "../lib/ipc";
+
+  async function render() {
+    const recipes = await listRecipes();
+    const hero = document.getElementById("recipes-hero")!;
+    const grid = document.getElementById("recipes-grid")!;
+    const subtitle = document.getElementById("recipes-subtitle")!;
+
+    if (recipes.length === 0) return;
+
+    subtitle.textContent = `${recipes.length} recipe${recipes.length === 1 ? "" : "s"} ready to install.`;
+    hero.removeAttribute("style");
+    grid.style.display = "";
+    grid.innerHTML = "";
+    for (const r of recipes) {
+      const card = document.createElement("article");
+      card.className = "card";
+      const meta = [`id · ${r.id}`];
+      if (r.steam_app_id) meta.push(`steam ${r.steam_app_id}`);
+      card.innerHTML = `
+        <h3>${escapeHtml(r.name)}</h3>
+        <p class="meta">${meta.join(" · ")}</p>
+        <span class="badge ready">ready</span>
+      `;
+      grid.appendChild(card);
+    }
+  }
+
+  function escapeHtml(s: string): string {
+    return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
+  }
+
+  render().catch((e) => console.error("[recipes] load failed:", e));
+</script>

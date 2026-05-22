@@ -1,20 +1,6 @@
 ---
 import Shell from "../layouts/Shell.astro";
 import BarrelMascot from "../components/BarrelMascot.astro";
-
-// Phase-xp: the Wine install summary is static. Once Tauri IPC lands, it
-// will report the actual ~/.vinaria/wine/ state.
-const wineState: {
-  installed: boolean;
-  version?: string;
-  dllCount?: number;
-  buildHost?: string;
-} = {
-  installed: true,
-  version: "wine-11.0",
-  dllCount: 1017,
-  buildHost: "CodeWeavers 26.1.0 source",
-};
 ---
 
 <Shell title="Vinaria — Wine" module="wine" topbarLabel="Wine">
@@ -26,20 +12,43 @@ const wineState: {
         The runtime that translates Windows calls into macOS calls. Vinaria
         builds it from CodeWeavers' published LGPL source.
       </p>
-      {wineState.installed ? (
-        <ul class="feature-list">
-          <li><span class="feature-icon">●</span>{wineState.version}</li>
-          <li><span class="feature-icon">●</span>{wineState.dllCount} built-in DLLs</li>
-          <li><span class="feature-icon">●</span>Source: {wineState.buildHost}</li>
-        </ul>
-      ) : (
-        <ul class="feature-list">
-          <li><span class="feature-icon">◆</span>Built from CodeWeavers LGPL source</li>
-          <li><span class="feature-icon">◆</span>Patched for macOS Sonoma OpenGL</li>
-          <li><span class="feature-icon">◆</span>~45 min on Intel — coffee-break length</li>
-        </ul>
-      )}
+      <ul class="feature-list" id="wine-features">
+        <li><span class="feature-icon">…</span>Loading state…</li>
+      </ul>
     </div>
   </section>
-  <button class="fab">{wineState.installed ? "Reinstall" : "Build"}</button>
+  <button class="fab" id="wine-fab">Reinstall</button>
 </Shell>
+
+<script>
+  import { wineState } from "../lib/ipc";
+
+  async function render() {
+    const state = await wineState();
+    const list = document.getElementById("wine-features")!;
+    const fab = document.getElementById("wine-fab")!;
+
+    if (!state.installed) {
+      list.innerHTML = `
+        <li><span class="feature-icon">◆</span>Built from CodeWeavers LGPL source</li>
+        <li><span class="feature-icon">◆</span>Patched for macOS Sonoma OpenGL</li>
+        <li><span class="feature-icon">◆</span>~45 min on Intel — coffee-break length</li>
+      `;
+      fab.textContent = "Build";
+      return;
+    }
+
+    const rows: string[] = [];
+    if (state.version) rows.push(`<li><span class="feature-icon">●</span>${escapeHtml(state.version)}</li>`);
+    if (state.dll_count) rows.push(`<li><span class="feature-icon">●</span>${state.dll_count} built-in DLLs</li>`);
+    rows.push(`<li><span class="feature-icon">●</span>${escapeHtml(state.install_dir)}</li>`);
+    list.innerHTML = rows.join("");
+    fab.textContent = "Reinstall";
+  }
+
+  function escapeHtml(s: string): string {
+    return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]!));
+  }
+
+  render().catch((e) => console.error("[wine] load failed:", e));
+</script>

@@ -1,41 +1,67 @@
 ---
 import Shell from "../layouts/Shell.astro";
 import BottleMascot from "../components/BottleMascot.astro";
-
-// Phase-xp stub: the bottle list is empty until Tauri IPC list_bottles is
-// wired. When populated, this page switches from hero+empty to a card grid.
-const bottles: { id: string; name: string; recipe?: string; status: string }[] = [];
 ---
 
 <Shell title="Vinaria — Bottles" module="bottles" topbarLabel="Bottles">
-  {bottles.length === 0 ? (
+  <div id="bottles-root" data-empty>
     <section class="hero">
-      <div class="hero-art">
-        <BottleMascot />
-      </div>
+      <div class="hero-art"><BottleMascot /></div>
       <div>
-        <h1 class="hero-title">Bottles</h1>
-        <p class="hero-subtitle">
+        <h1 class="hero-title" id="bottles-title">Bottles</h1>
+        <p class="hero-subtitle" id="bottles-subtitle">
           A bottle is one Windows app set up to run on your Mac. Pick a recipe
           from the catalog or import an existing Wine prefix.
         </p>
-        <ul class="feature-list">
+        <ul class="feature-list" id="bottles-features">
           <li><span class="feature-icon">◆</span>One-click install from recipe</li>
           <li><span class="feature-icon">◆</span>Isolated Wine prefix per app</li>
           <li><span class="feature-icon">◆</span>Launch directly from the dock</li>
         </ul>
       </div>
     </section>
-    <button class="fab">Install</button>
-  ) : (
-    <div class="card-grid">
-      {bottles.map((b) => (
-        <article class="card">
-          <h3>{b.name}</h3>
-          {b.recipe && <p class="meta">recipe · {b.recipe}</p>}
-          <span class={`badge ${b.status}`}>{b.status}</span>
-        </article>
-      ))}
-    </div>
-  )}
+    <div class="card-grid" id="bottles-grid" style="display: none;"></div>
+  </div>
+  <button class="fab" id="bottles-fab">Install</button>
 </Shell>
+
+<script>
+  import { listBottles } from "../lib/ipc";
+
+  async function render() {
+    const bottles = await listBottles();
+    const root = document.getElementById("bottles-root")!;
+    const grid = document.getElementById("bottles-grid")!;
+    const heroSection = root.querySelector(".hero")!;
+
+    if (bottles.length === 0) {
+      heroSection.removeAttribute("style");
+      grid.style.display = "none";
+      return;
+    }
+
+    heroSection.setAttribute("style", "display: none;");
+    grid.style.display = "";
+    grid.innerHTML = "";
+    for (const b of bottles) {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.innerHTML = `
+        <h3>${escapeHtml(b.name)}</h3>
+        ${b.recipe ? `<p class="meta">recipe · ${escapeHtml(b.recipe)}</p>` : ""}
+        <span class="badge ready">ready</span>
+      `;
+      grid.appendChild(card);
+    }
+  }
+
+  function escapeHtml(s: string): string {
+    return s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  render().catch((e) => console.error("[bottles] load failed:", e));
+</script>
