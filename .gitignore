@@ -5,6 +5,7 @@ node_modules/
 dist/
 .tauri/
 .astro/
+src-tauri/gen/
 *.log
 
 # OS
