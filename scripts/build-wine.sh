@@ -41,9 +41,13 @@ echo "==> Using m4:    $(which m4) ($(m4 --version | head -1))"
 # Configure if not already done
 if [ ! -f Makefile ]; then
   echo "==> Configuring (this writes config.log to $BUILD_DIR/)"
+  # OPENGL_LIBS override: Wine's configure looks for libGL.dylib on disk,
+  # but macOS Sonoma (Darwin 23+) hides it in the dyld shared cache. Force
+  # the framework link directly so configure detects OpenGL support.
   PKG_CONFIG_PATH="$BREW_PREFIX/opt/openssl@3/lib/pkgconfig:$BREW_PREFIX/lib/pkgconfig" \
   CFLAGS="-I$BREW_PREFIX/include -O2 -g" \
   LDFLAGS="-L$BREW_PREFIX/lib" \
+  OPENGL_LIBS="-framework OpenGL" \
   "$WINE_SRC/configure" \
     --prefix="$REPO_ROOT/build/wine-install" \
     --enable-win64 \
