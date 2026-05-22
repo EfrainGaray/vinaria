@@ -15,11 +15,12 @@ if [ ! -d "$SRC_DIR" ]; then
   exit 1
 fi
 
-# Tarball typically contains multiple components; Wine itself is in a sub-directory.
-# Locate the actual Wine source root (the one with configure script).
-WINE_SRC="$(find "$SRC_DIR" -name "configure" -maxdepth 4 -path "*/wine*" | head -1 | xargs dirname)"
-if [ -z "$WINE_SRC" ] || [ ! -f "$WINE_SRC/configure" ]; then
-  echo "error: could not locate Wine source dir with configure script under $SRC_DIR" >&2
+# CodeWeavers source tarball bundles many components; Wine lives in `wine/`.
+# Use the fixed path so we don't accidentally pick another project's configure
+# (e.g. ghostscript) when the parent dir name contains "wine".
+WINE_SRC="$SRC_DIR/wine"
+if [ ! -f "$WINE_SRC/configure" ]; then
+  echo "error: $WINE_SRC/configure missing. Did the tarball layout change?" >&2
   exit 1
 fi
 echo "==> Wine source at: $WINE_SRC"
