@@ -1,0 +1,28 @@
+# Build artifacts and external sources
+build/
+target/
+node_modules/
+dist/
+.tauri/
+*.log
+
+# OS
+.DS_Store
+.AppleDouble
+
+# Editor
+.vscode/
+.idea/
+
+# Local config / secrets
+.env
+.env.local
+*.secret
+
+# Compiled Wine output (lives in ~/.vinaria/, never committed)
+wine-build/
+wine-install/
+
+# Caches
+.cache/
+__pycache__/
