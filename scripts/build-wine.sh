@@ -10,6 +10,19 @@ SRC_DIR="$REPO_ROOT/build/wine-source-${CX_VERSION}"
 BUILD_DIR="$REPO_ROOT/build/wine-build"
 JOBS="${JOBS:-$(sysctl -n hw.ncpu)}"
 
+# xcrun's SDK lookup is broken on some macOS installs (returns
+# "SDK 'macosx' cannot be located" even when the SDK exists on disk under
+# /Library/Developer/CommandLineTools/SDKs/). Pin it explicitly so wine's
+# build doesn't trip over it.
+if ! xcrun --sdk macosx --show-sdk-path >/dev/null 2>&1; then
+  if [ -d /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk ]; then
+    export SDKROOT="/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk"
+    echo "==> xcrun lookup broken; pinning SDKROOT=$SDKROOT"
+  else
+    echo "warning: no MacOSX SDK found and xcrun is broken" >&2
+  fi
+fi
+
 if [ ! -d "$SRC_DIR" ]; then
   echo "error: source not found at $SRC_DIR. Run ./scripts/fetch-wine.sh first." >&2
   exit 1
