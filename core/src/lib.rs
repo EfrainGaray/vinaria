@@ -5,6 +5,7 @@
 //! a future CLI or alternate frontend.
 
 pub mod bottle;
+pub mod paths;
 pub mod recipe;
 pub mod spawner;
 
