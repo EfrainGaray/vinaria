@@ -1,0 +1,15 @@
+# Vinaria recipe — Celeste
+# https://store.steampowered.com/app/504230/
+
+id              = "celeste"
+name            = "Celeste"
+steam_app_id    = 504230
+windows_version = "win10"
+
+# FNA-based game (FNA wraps SDL2 + Vulkan/OpenGL). Light on Wine quirks.
+
+[launch]
+executable = 'C:\Program Files (x86)\Steam\steamapps\common\Celeste\Celeste.exe'
+
+[launch.env]
+WINEMSYNC = "1"

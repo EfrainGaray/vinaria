@@ -1,0 +1,16 @@
+# Vinaria recipe — Stardew Valley
+# https://store.steampowered.com/app/413150/
+
+id              = "stardew_valley"
+name            = "Stardew Valley"
+steam_app_id    = 413150
+windows_version = "win10"
+
+# Stardew runs cleanly on vanilla Wine — no special tweaks needed beyond
+# Vinaria's defaults.
+
+[launch]
+executable = 'C:\Program Files (x86)\Steam\steamapps\common\Stardew Valley\Stardew Valley.exe'
+
+[launch.env]
+WINEMSYNC = "1"

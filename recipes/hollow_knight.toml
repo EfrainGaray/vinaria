@@ -1,0 +1,21 @@
+# Vinaria recipe — Hollow Knight
+# https://store.steampowered.com/app/367520/
+
+id              = "hollow_knight"
+name            = "Hollow Knight"
+steam_app_id    = 367520
+windows_version = "win10"
+
+# Unity game using DX11. Same wined3d access-map tweak we use for GameMaker
+# games doesn't hurt here either.
+[[registry]]
+key   = 'HKCU\Software\Wine\Direct3D'
+name  = 'cb_access_map_w'
+kind  = 'dword'
+value = 1
+
+[launch]
+executable = 'C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight\hollow_knight.exe'
+
+[launch.env]
+WINEMSYNC = "1"
