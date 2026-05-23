@@ -3793,6 +3793,7 @@ dependencies = [
  "tokio",
  "tracing",
  "tracing-subscriber",
+ "uuid",
  "vinaria-core",
 ]
 
